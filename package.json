@@ -21,7 +21,9 @@
     "cli-color": "~0.2.2",
     "fs-extra": "~0.6.4",
     "watchr": "~2.4.3",
-    "less": "~1.4.2"
+    "less": "~1.4.2",
+    "aws-sdk": "~1.6.0",
+    "mime": "~1.2.11"
   },
   "repository": {
     "type": "git",

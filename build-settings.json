@@ -11,7 +11,8 @@
 		"index": true,
 		"manifest": true,
 		"require": true,
-		"text": false
+		"text": false,
+        "s3": true
 	},
 	"folders": {
 		"source": "src",
@@ -28,5 +29,6 @@
 	},
     "empty": [],
     "platforms": [],
-    "notify": true
+    "notify": true,
+    "bucket": "testcast.fedr.co"
 }

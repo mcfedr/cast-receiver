@@ -25,7 +25,7 @@ require([
     'controllers/main'
 ], function(angular, mainC) {
     var $html = angular.element(document.getElementsByTagName('html')[0]),
-        app = angular.module('lt.app', [
+        app = angular.module('app', [
             'ngRoute',
             'ngAnimate'
         ]).controller('cast.main', mainC);

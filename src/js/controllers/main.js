@@ -1,5 +1,5 @@
 define(function() {
-    return ['$scope', function CastC($scope) {
+    return ['$scope', function ($scope) {
         var CAST_APP_ID = "938337b2-f581-41c4-b2c4-73e9cbe9e7ea",
             $localVideo = $('#localVideo');
 

@@ -1,10 +1,12 @@
 var async       = require('async'),
+    AWS         = require('aws-sdk'),
 	cc          = require('cli-color'),
 	connect     = require('connect'),
 	fs          = require('fs'),
 	fse         = require('fs-extra'),
 	imagemagick = require('imagemagick'),
 	less        = require('less'),
+    mime        = require('mime'),
 	path        = require('path'),
 	project     = require('./build-settings'),
 	requirejs   = require('requirejs'),
@@ -15,6 +17,9 @@ var async       = require('async'),
 	_           = require('underscore');
 
 function start(cb) {
+    if(project.helpers.s3) {
+        AWS.config.loadFromPath('./aws.json');
+    }
 	if(process.argv.length > 2 && process.argv[2] == 'watch') {
 		async.series([
 			tasks.actions.build,
@@ -67,6 +72,10 @@ var tasks = {
 				auto.cordova = (project.helpers.manifest ? ['manifest'] : ['js', 'html', 'css', 'assets']);
 				auto.cordova.push(tasks.helpers.cordova);
 			}
+            if(project.helpers.s3) {
+                auto.s3 = (project.helpers.manifest ? ['manifest'] : ['js', 'html', 'css', 'assets']);
+                auto.s3.push(tasks.helpers.s3);
+            }
 			async.auto(auto, function(err) {
 				if(err) {
 					cb(err);
@@ -103,6 +112,10 @@ var tasks = {
 				auto.cordova = (project.helpers.manifest ? ['manifest'] : ['task']);
 				auto.cordova.push(tasks.helpers.cordova);
 			}
+            if(project.helpers.s3) {
+                auto.s3 = (project.helpers.manifest ? ['manifest'] : ['task']);
+                auto.s3.push(tasks.helpers.s3);
+            }
 			
 			var running = false;
 			function listener(type) {
@@ -508,7 +521,95 @@ var tasks = {
 				doneMsg('manifest');
 				cb();
 			});
-		}
+		},
+        s3: function(cb) {
+            startMsg('s3');
+            var s3 = new AWS.S3(),
+                folder = folder = build('webapp');
+            async.auto({
+                list: function(cb) {
+                    s3.listObjects({
+                        Bucket: project.bucket
+                    }, cb);
+                },
+                del: ['list', function(cb, results) {
+                    if(results.list.Contents.length) {
+                        s3.deleteObjects({
+                            Bucket: project.bucket,
+                            Delete: {
+                                Objects: results.list.Contents.map(function(obj) {
+                                    return {
+                                        Key: obj.Key
+                                    };
+                                })
+                            }
+                        }, cb);
+                    }
+                    else {
+                        cb();
+                    }
+                }],
+                files: function(cb) {
+                    var strStart = (folder + path.sep).length,
+                        toUpload = [];
+                    var c = 0,
+                        finish = function(err) {
+                            if(err) {
+                                c = -1;
+                                cb(err);
+                            }
+                            c--;
+                            if(c == 0) {
+                                cb(null, toUpload);
+                            }
+                        };
+                    wrench.readdirRecursive(folder, function(err, files) {
+                        if(!files) {
+                            finish();//folders for each cb
+                            return;
+                        }
+                        c++;
+                        async.forEach(files, function(file, cb) {
+                            var n = path.join(folder, file);
+                                fs.stat(n, function(err, stats) {
+                                    if(err) {
+                                        cb(err);
+                                        return;
+                                    }
+                                    if(stats.isFile()) {
+                                        toUpload.push(n.substr(strStart));
+                                    }
+                                    cb();//files for each cb
+                                });
+                        }, finish);
+                    });
+                },
+                up: ['del', 'files', function(cb, results) {
+                    async.each(results.files, function(file, cb) {
+                        fs.readFile(path.join(folder, file), function (err, data) {
+                            if(err) {
+                                cb(err);
+                                return;
+                            }
+                            s3.putObject({
+                                Bucket: project.bucket,
+                                Key: file,
+                                Body: data,
+                                ACL: 'public-read',
+                                ContentType: mime.lookup(path.join(folder, file))
+                            }, cb);
+                        });
+                    }, cb);
+                }]
+            }, function(err) {
+                if(err) {
+                    cb(err);
+                    return;
+                }
+                doneMsg('s3');
+                cb();
+            });
+        }
 	}
 }
 
