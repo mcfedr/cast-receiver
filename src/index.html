@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body ng-controller="CastC">
+        <video id="localVideo" class="cast-player"></video>
+        <div class="cast-third">
+            <h1>{{ video.name }}</h1>
+        </div>
+        <script src="https://www.gstatic.com/cast/js/receiver/1.0/cast_receiver.js"></script>
+        <script src="/bower_components/jquery/jquery.min.js"></script>
+        <script src="/bower_components/angular/angular.min.js"></script>
+        <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="index.js"></script>
+    </body>
+</html>
