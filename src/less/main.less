@@ -1,3 +1,4 @@
+@import '../bower_components/lesshat/lesshat';
 @import '../bower_components/bootstrap/less/bootstrap';
 
 .cast-player {
@@ -6,6 +7,8 @@
     left: 0;
     height: 100%;
     width: 100%
+    
+    z-index: 1;
 }
 
 .cast-third {
@@ -14,6 +17,51 @@
     left: 0;
     height: 33%;
     width: 100%;
+    padding: 40px;
+    font-size: 40px;
 
-    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    .transition(~"opacity 300ms ease-in");
+    
+    &.show {
+        opacity: 1;
+    }
+    
+    z-index: 2;
+}
+
+.cast-flash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    
+    opacity: 0;
+    .transition(~"opacity 100ms ease-in");
+    
+    .cast-flash-inner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -25px;
+        margin-left: -25px;
+        width: 100px;
+        height: 100px;
+        
+        font-size: 80px;
+        text-align: center;
+        color: white;
+        border-radius: 10px;
+        
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    
+    &.show {
+        opacity: 1;
+    }
+    
+    z-index: 3;
 }

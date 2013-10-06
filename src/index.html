@@ -6,9 +6,12 @@
     </head>
     <body ng-controller="cast.main">
         <video id="localVideo" class="cast-player"></video>
-        <div class="cast-third">
-            <h1>{{ video.name }}</h1>
+        <div id="third" class="cast-third">
+            {{ video.name }}
         </div>
+		<div id="flash" class="cast-flash">
+			<div class="cast-flash-inner glyphicon glyphicon-{{ flash }}"></div>
+		</div>
         <script src="https://www.gstatic.com/cast/js/receiver/1.0/cast_receiver.js"></script>
         <script data-main="js/main" src="bower_components/requirejs/require.js"></script>
     </body>

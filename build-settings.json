@@ -9,10 +9,11 @@
 		"hogan": false,
 		"icons": false,
 		"index": true,
-		"manifest": true,
+		"manifest": false,
 		"require": true,
 		"text": false,
-        "s3": true
+        "s3": true,
+        "bootstrap": true
 	},
 	"folders": {
 		"source": "src",
@@ -20,7 +21,8 @@
 			"css": "css",
 			"images": "img",
 			"js": "js",
-			"less": "less"
+			"less": "less",
+            "fonts": "fonts"
 		},
 		"build": "build",
 		"modules": {
