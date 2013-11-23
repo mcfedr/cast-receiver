@@ -13,7 +13,7 @@ define(function() {
     return ['$scope', '$timeout', function ($scope, $timeout) {
         var $localVideo = $('#localVideo'),
             $third = $('#third'),
-            $flash = $('flash'),
+            $flash = $('#flash'),
             quitTimeout;
 
         startQuitTimeout();

@@ -46,17 +46,19 @@ body {
     
     opacity: 0;
     .transition(~"opacity 100ms ease-in");
+
+    @size: 100px;
     
     .cast-flash-inner {
         position: absolute;
         top: 50%;
         left: 50%;
-        margin-top: -25px;
-        margin-left: -25px;
-        width: 100px;
-        height: 100px;
+        margin-top: -(@size / 2);
+        margin-left: -(@size / 2);
+        width: @size;
+        height: @size;
         
-        font-size: 80px;
+        font-size: @size * 0.8;
         text-align: center;
         color: white;
         border-radius: 10px;
