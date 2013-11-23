@@ -1,12 +1,15 @@
-@import '../bower_components/lesshat/lesshat';
 @import '../bower_components/bootstrap/less/bootstrap';
+
+body {
+  background: black;
+}
 
 .cast-player {
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
-    width: 100%
+    width: 100%;
     
     z-index: 1;
 }
@@ -19,6 +22,8 @@
     width: 100%;
     padding: 40px;
     font-size: 40px;
+
+    overflow: hidden;
 
     color: white;
     background-color: rgba(0, 0, 0, 0.5);

@@ -10,11 +10,14 @@ var channelHandler = new cast.receiver.ChannelHandler(FEDR_NAMESPACE);
 channelHandler.addChannelFactory(receiver.createChannelFactory(FEDR_NAMESPACE));
 
 define(function() {
-    return ['$scope', function ($scope) {
+    return ['$scope', '$timeout', function ($scope, $timeout) {
         var $localVideo = $('#localVideo'),
             $third = $('#third'),
-            $flash = $('flash');
-            
+            $flash = $('flash'),
+            quitTimeout;
+
+        startQuitTimeout();
+
         $scope.video = {
             name: 'The Video Name'
         };
@@ -33,10 +36,12 @@ define(function() {
         
         $localVideo.on('play', function() {
             flash('play');
+            stopQuitTimeout();
         });
         
         $localVideo.on('pause', function() {
             flash('pause');
+            startQuitTimeout();
         });
         
         function flash(type) {
@@ -54,5 +59,15 @@ define(function() {
         });
         
         receiver.start();
+
+        function startQuitTimeout() {
+            quitTimeout = $timeout(function() {
+                window.close();
+            }, 5 * 60 * 1000);
+        }
+
+        function stopQuitTimeout() {
+            $timeout.cancel(quitTimeout);
+        }
     }];
 });
