@@ -14,9 +14,11 @@ define(function() {
         var $localVideo = $('#localVideo'),
             $third = $('#third'),
             $flash = $('#flash'),
+            $logo = $('#logo'),
+            logoTimeout,
             quitTimeout;
 
-        startQuitTimeout();
+        startQuit();
 
         $scope.video = {
             name: 'The Video Name'
@@ -36,12 +38,14 @@ define(function() {
         
         $localVideo.on('play', function() {
             flash('play');
-            stopQuitTimeout();
+            cancelQuit();
+            hideLogo();
         });
         
         $localVideo.on('pause', function() {
             flash('pause');
-            startQuitTimeout();
+            startQuit();
+            showLogo();
         });
         
         function flash(type) {
@@ -60,14 +64,25 @@ define(function() {
         
         receiver.start();
 
-        function startQuitTimeout() {
+        function startQuit() {
             quitTimeout = $timeout(function() {
                 window.close();
             }, 5 * 60 * 1000);
         }
 
-        function stopQuitTimeout() {
+        function cancelQuit() {
             $timeout.cancel(quitTimeout);
+        }
+
+        function showLogo() {
+            logoTimeout = $timeout(function() {
+                $logo.addClass('show');
+            }, 10 * 1000);
+        }
+
+        function hideLogo() {
+            $timeout.cancel(logoTimeout);
+            $logo.removeClass('show');
         }
     }];
 });
