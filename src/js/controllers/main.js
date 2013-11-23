@@ -1,13 +1,9 @@
-var CAST_APP_ID = "938337b2-f581-41c4-b2c4-73e9cbe9e7ea",
-    FEDR_NAMESPACE = 'cast.fedr.co';
+var CAST_APP_ID = "938337b2-f581-41c4-b2c4-73e9cbe9e7ea";
 
-var receiver = new cast.receiver.Receiver(CAST_APP_ID, [cast.receiver.RemoteMedia.NAMESPACE, FEDR_NAMESPACE], "", 5);
+var receiver = new cast.receiver.Receiver(CAST_APP_ID, [cast.receiver.RemoteMedia.NAMESPACE], "", 5);
 
 var remoteMedia = new cast.receiver.RemoteMedia();
 remoteMedia.addChannelFactory(receiver.createChannelFactory(cast.receiver.RemoteMedia.NAMESPACE));
-
-var channelHandler = new cast.receiver.ChannelHandler(FEDR_NAMESPACE);
-channelHandler.addChannelFactory(receiver.createChannelFactory(FEDR_NAMESPACE));
 
 define(function() {
     return ['$scope', '$timeout', function ($scope, $timeout) {
@@ -57,10 +53,6 @@ define(function() {
                 }, 1000);
             });
         }
-        
-        channelHandler.addEventListener(cast.receiver.Channel.EventType.MESSAGE, function(e) {
-            console.log(e);
-        });
         
         receiver.start();
 
